@@ -1,0 +1,156 @@
+<header class="header_section">
+  <nav class="navbar navbar-expand-lg custom_nav-container">
+    <a class="navbar-brand">
+      <span> Giftos </span>
+    </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-toggle="collapse"
+      data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      [attr.aria-expanded]="navbarOpen"
+      (click)="toggleNavbar()"
+      aria-label="Toggle navigation"
+    >
+      <span class=""></span>
+    </button>
+
+    <div
+      class="collapse navbar-collapse"
+      id="navbarSupportedContent"
+      [class.show]="navbarOpen"
+    >
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/']"
+            >Anasayfa <span class="sr-only">(current)</span></a
+          >
+        </li>
+        <li
+          class="nav-item dropdown"
+          [class.show]="dropdownOpen"
+          (click)="toggleDropdown()"
+        >
+          <a
+            class="nav-link dropdown-toggle"
+            id="categoriesDropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            Kategoriler
+          </a>
+          <div
+            class="dropdown-menu"
+            [class.show]="dropdownOpen"
+            aria-labelledby="categoriesDropdown"
+          >
+            <div
+              class="container"
+              *ngIf="subcategories$ | async as subcategories"
+            >
+              <div
+                class="row"
+                *ngIf="subcategories.length > 0; else noSubcategory"
+              >
+                <div class="outerwear col-12 col-md-3">
+                  <p>Dış Giyim</p>
+                  <div
+                    class="subcategory-link"
+                    *ngFor="let subcategory of subcategories"
+                  >
+                    <a
+                      *ngIf="subcategory.categoryId == 2"
+                      [routerLink]="['/product']"
+                      [queryParams]="{ subcategoryId: subcategory.id }"
+                    >
+                      {{ subcategory.name }}
+                    </a>
+                  </div>
+                  <a
+                    [routerLink]="['/product']"
+                    [queryParams]="{ categoryId: 2 }"
+                    >Tümünü Gör</a
+                  >
+                </div>
+                <div class="topwear col-12 col-md-3">
+                  <p>Üst Giyim</p>
+                  <div
+                    class="subcategory-link"
+                    *ngFor="let subcategory of subcategories"
+                  >
+                    <a
+                      *ngIf="subcategory.categoryId == 3"
+                      [routerLink]="['/product']"
+                      [queryParams]="{ subcategoryId: subcategory.id }"
+                      >{{ subcategory.name }}
+                    </a>
+                  </div>
+                  <a
+                    [routerLink]="['/product']"
+                    [queryParams]="{ categoryId: 3 }"
+                    >Tümünü Gör</a
+                  >
+                </div>
+                <div class="bottomwear col-12 col-md-3">
+                  <p>Alt Giyim</p>
+                  <div
+                    class="subcategory-link"
+                    *ngFor="let subcategory of subcategories"
+                  >
+                    <a
+                      *ngIf="subcategory.categoryId == 4"
+                      [routerLink]="['/product']"
+                      [queryParams]="{ subcategoryId: subcategory.id }"
+                      >{{ subcategory.name }}
+                    </a>
+                  </div>
+                  <a
+                    [routerLink]="['/product']"
+                    [queryParams]="{ categoryId: 4 }"
+                    >Tümünü Gör</a
+                  >
+                </div>
+                <div class="accessories col-12 col-md-3">
+                  <p>Aksesuar</p>
+                  <div
+                    class="subcategory-link"
+                    *ngFor="let subcategory of subcategories"
+                  >
+                    <a
+                      *ngIf="subcategory.categoryId == 5"
+                      [routerLink]="['/product']"
+                      [queryParams]="{ subcategoryId: subcategory.id }"
+                      >{{ subcategory.name }}
+                    </a>
+                  </div>
+                  <div class="accessories-see-all">
+                    <a
+                      [routerLink]="['/product']"
+                      [queryParams]="{ categoryId: 5 }"
+                      >Tümünü Gör
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <ng-template #noSubcategory>
+                <div class="noSubcategory">
+                  <p>Alt kategori bulunamadı</p>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </li>
+      </ul>
+      <div class="user_option">
+        <a [routerLink]="['/account']">
+          <i class="fa fa-user" aria-hidden="true"></i>
+        </a>
+        <a>
+          <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+        </a>
+      </div>
+    </div>
+  </nav>
+</header>

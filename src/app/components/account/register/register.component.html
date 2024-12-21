@@ -1,0 +1,75 @@
+<div class="navigation">
+  <p>
+    <a [routerLink]="['/']">Home</a> /
+    <a [routerLink]="['/accoun/register']">Register</a>
+  </p>
+</div>
+<div class="login-form">
+  <form [formGroup]="registerForm" (ngSubmit)="register()">
+    <h3 class="mb-3">Kullanıcı Kaydı</h3>
+    <div class="mb-3">
+      <label class="form-label" for="firstName">Ad *</label>
+      <input
+        type="text"
+        name="firstName"
+        placeholder=""
+        formControlName="firstName"
+        class="form-control"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="lastName" class="form-label">Soyad *</label>
+      <input
+        type="text"
+        name="lastName"
+        formControlName="lastName"
+        class="form-control"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="email" class="form-label">Email *</label>
+      <input
+        type="email"
+        name="email"
+        formControlName="email"
+        class="form-control"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="phoneNumber" class="form-label">Telefon Numarası *</label>
+      <input
+        type="text"
+        name="phoneNumber"
+        formControlName="phoneNumber"
+        class="form-control"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Şifre *</label>
+      <input
+        type="password"
+        name="password"
+        formControlName="password"
+        class="form-control"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="confirmedPassword" class="form-label">Şifre Tekrar *</label>
+      <input
+        type="password"
+        name="confirmedPassword"
+        formControlName="confirmedPassword"
+        class="form-control"
+      />
+    </div>
+    <div class="d-flex justify-content-between">
+      <button
+        type="submit"
+        class="btn btn-outline-dark"
+        [disabled]="registerForm.invalid"
+      >
+        Sign-Up
+      </button>
+    </div>
+  </form>
+</div>

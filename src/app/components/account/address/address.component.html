@@ -1,0 +1,55 @@
+<div class="container">
+  <div class="address-form">
+    <form [formGroup]="addressForm" (ngSubmit)="createAddress()">
+      <h3>Adres Formu</h3>
+      <div>
+        <label class="form-label" for="address">Adres 1</label>
+        <input
+          class="form-control"
+          type="text"
+          name="addressLine"
+          formControlName="addressLine"
+        />
+      </div>
+      <div>
+        <label class="form-label" for="city">Adres 2</label>
+        <input
+          class="form-control"
+          type=""
+          name="addressLine2"
+          formControlName="addressLine2"
+        />
+      </div>
+      <div>
+        <label class="form-label" for="district">Şehir</label>
+        <input
+          class="form-control"
+          type=""
+          name="city"
+          formControlName="city"
+        />
+      </div>
+      <div>
+        <label class="form-label" for="postalCode" for="postalCode">Ülke</label>
+        <input
+          class="form-control"
+          type=""
+          name="country"
+          formControlName="country"
+        />
+      </div>
+      <div>
+        <button
+          class="btn btn-dark"
+          [disabled]="addressForm.invalid"
+          type="submit"
+        >
+          Kaydet
+        </button>
+      </div>
+    </form>
+    <button class="btn btn-outline-dark" [routerLink]="['/account']">
+      İptal
+    </button>
+  </div>
+</div>

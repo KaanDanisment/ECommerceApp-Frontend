@@ -1,0 +1,43 @@
+<div *ngIf="subcategoryImage$ | async as subcategoryImage">
+  <img
+    class="img-fluid"
+    src="https://localhost:7281/static/{{ subcategoryImage.imageUrl }}"
+    alt=""
+  />
+</div>
+<ng-container *ngIf="products$ | async as products; else loading">
+  <div class="container">
+    <div *ngIf="products.length > 0; else noProducts">
+      <div class="row">
+        <div class="col-12 col-md-3" *ngFor="let product of products">
+          <div class="card">
+            <img
+              src="https://giesto.com/cdn/shop/files/t88_2048x2048.jpg?v=1727034800"
+              class="card-img-top"
+            />
+            <div class="card-body">
+              <h5 class="card-title">{{ product.name }}</h5>
+              <div class="d-flex justify-content-between">
+                <p class="card-text">{{ product.price | currency }}</p>
+                <p class="me-3">+</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #noProducts>
+  <div class="noProducts">
+    <p>Bu kategoride ürün bulunamadı.</p>
+  </div>
+</ng-template>
+
+<ng-template #loading>
+  <div class="loading-container">
+    <p>Yükleniyor...</p>
+    <div class="spinner"></div>
+  </div>
+</ng-template>

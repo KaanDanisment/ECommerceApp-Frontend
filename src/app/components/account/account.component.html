@@ -1,0 +1,47 @@
+<div class="container" *ngIf="currentUser$ | async as currentUser">
+  <div class="header">HESAP</div>
+  <div class="account-infos">
+    <div class="user-infos">
+      <div class="justify-content-between d-flex">
+        <h4>Hesap Bilgileri</h4>
+        <button class="btn btn-dark" [routerLink]="['/account/update-user']">
+          Düzenle
+        </button>
+      </div>
+      <div class="info">
+        <div class="label">İsim:</div>
+        <div class="data">
+          {{ currentUser.firstName }} {{ currentUser.lastName }}
+        </div>
+      </div>
+      <div class="info">
+        <div class="label">Email:</div>
+        <div class="data">{{ currentUser.email }}</div>
+      </div>
+      <div class="info">
+        <div class="label">Telefon:</div>
+        <div class="data">{{ currentUser.phoneNumber }}</div>
+      </div>
+    </div>
+    <div class="address-infos mt-5">
+      <h4>Adres Bilgileri</h4>
+      <div class="container">
+        <div class="row gap-3">
+          <div
+            class="address col-md-4 col-12"
+            *ngFor="let address of currentUser.addresses"
+          >
+            <div class="mb-2">{{ address.addressLine }}</div>
+            <div class="mb-2">{{ address.addressLine2 }}</div>
+            <div class="mb-2">{{ address.city }}</div>
+            <div class="mb-2">{{ address.country }}</div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-dark mt-5" [routerLink]="['/account/address']">
+        Yeni adres ekle
+      </button>
+    </div>
+  </div>
+</div>

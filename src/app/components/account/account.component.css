@@ -1,0 +1,33 @@
+@import "@fontsource/poppins/index.css";
+
+.container {
+  font-family: "Poppins", sans-serif;
+}
+.header {
+  display: flex;
+  justify-content: center;
+  margin: 3rem 0;
+  font-weight: bolder;
+  font-size: 3.5rem;
+}
+.account-infos {
+  padding: 0 4rem;
+}
+.account-infos h4 {
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+.info {
+  display: flex;
+  margin-top: 1rem;
+  border-bottom: 1px solid rgb(230, 221, 221);
+}
+.label {
+  width: 6rem;
+  margin-right: 10rem;
+  font-weight: bold;
+}
+.address {
+  border: 1px solid rgb(230, 221, 221);
+  padding: 1rem 0 1rem 1rem;
+}

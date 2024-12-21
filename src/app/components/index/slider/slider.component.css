@@ -1,0 +1,17 @@
+.slider_section .slider_container {
+  border-radius: 0 0 15px 15px;
+}
+
+::ng-deep .owl-carousel {
+  position: relative !important;
+}
+::ng-deep .owl-nav {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  bottom: 0 !important;
+  right: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}

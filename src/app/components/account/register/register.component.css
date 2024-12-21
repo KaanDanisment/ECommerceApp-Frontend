@@ -1,0 +1,30 @@
+a {
+  color: black;
+}
+.login-form {
+  margin: 0 0 15rem;
+  padding: 9rem 30rem;
+  background-color: #f7f6f9;
+}
+.form-control {
+  border-width: 1px;
+  border-color: black;
+}
+.form-control:focus {
+  box-shadow: none;
+}
+.btn {
+  border-width: 2px;
+  border-color: black;
+  width: 8rem;
+}
+.navigation {
+  height: 1.5rem;
+  padding-left: 1rem;
+}
+.success-messag {
+  color: green;
+}
+.form-label {
+  font-weight: bold;
+}
