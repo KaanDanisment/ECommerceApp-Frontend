@@ -10,7 +10,7 @@ import {
 } from 'rxjs';
 import { UserDto } from '../../models/Dtos/userDto.model';
 import { User } from '../../models/user.model';
-import { AddressDto } from '../../models/Dtos/AddressDto.model';
+import { AddressDto } from '../../models/Dtos/addressDto.model';
 
 @Injectable({
   providedIn: 'root',
@@ -27,7 +27,12 @@ export class AccountService {
     this.http
       .get<UserDto>(this.apiUrl + '/getuserinfos', { withCredentials: true })
       .pipe(
-        map((userDto) => new User(userDto)),
+        map((userDto) => {
+          console.log('UserDto:', userDto); // Log raw DTO
+          const user = new User(userDto);
+          console.log('Mapped User:', user); // Log mapped user
+          return user;
+        }),
         tap((user) => this.currentUserSubject.next(user)),
         catchError(this.handleError)
       )
@@ -51,30 +56,68 @@ export class AccountService {
       })
       .pipe(catchError(this.handleError));
   }
+  deleteAddress(addressDto: AddressDto) {
+    return this.http
+      .delete(this.apiUrl + '/deleteaddress', {
+        headers: { 'Content-Type': 'application/json' },
+        body: addressDto,
+        withCredentials: true,
+      })
+      .pipe(catchError(this.handleError));
+  }
 
   private handleError(error: HttpErrorResponse): Observable<never> {
-    let errorMessage =
-      'Bilinmeyen bir hata oluştu. Lütfen daha sonra tekrar deneyin.';
+    let errorMessage: string;
 
+    // Ağ veya istemci kaynaklı hatalar
     if (error.error instanceof ErrorEvent) {
-      errorMessage = `İstemci tarafı hata: ${error.error.message}`;
-    } else {
-      switch (error.status) {
-        case 400:
-          errorMessage = error.error.message;
-          break;
-        case 404:
-          errorMessage = error.error.message;
-          break;
-        case 500:
-          errorMessage = 'Bir hata oluştu. Lütfen daha sonra tekrar deneyin.';
-          break;
-
-        default:
-          errorMessage = `Hata ${error.status}: ${error.message}`;
-          break;
-      }
+      errorMessage = `İstemci hatası: ${error.error.message}`;
+      console.error('İstemci hatası:', error.error);
+      return throwError(() => new Error(errorMessage));
     }
+
+    // Sunucu kaynaklı hatalar
+    switch (error.status) {
+      case 400:
+        errorMessage = error.error.message || 'Geçersiz istek';
+        break;
+      case 401:
+        errorMessage = 'Oturum süreniz doldu. Lütfen tekrar giriş yapın.';
+        break;
+      case 403:
+        errorMessage = 'Bu işlem için yetkiniz bulunmuyor.';
+        break;
+      case 404:
+        errorMessage = 'İstenen kaynak bulunamadı.';
+        break;
+      case 429:
+        errorMessage = 'Çok fazla istek gönderildi. Lütfen biraz bekleyin.';
+        break;
+      case 500:
+        errorMessage = 'Sunucu hatası. Lütfen daha sonra tekrar deneyin.';
+        break;
+      case 503:
+        errorMessage =
+          'Servis şu anda kullanılamıyor. Lütfen daha sonra tekrar deneyin.';
+        break;
+      case 0:
+        errorMessage =
+          'Sunucuya bağlanılamıyor. İnternet bağlantınızı kontrol edin.';
+        break;
+      default:
+        errorMessage = 'Beklenmeyen bir hata oluştu.';
+        break;
+    }
+
+    // Hata loglaması
+    console.error('HTTP Hata Detayı:', {
+      statusCode: error.status,
+      message: errorMessage,
+      timestamp: new Date().toISOString(),
+      url: error.url,
+      errorDetail: error.error,
+    });
+
     return throwError(() => new Error(errorMessage));
   }
 }

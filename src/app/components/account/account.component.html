@@ -26,15 +26,29 @@
     <div class="address-infos mt-5">
       <h4>Adres Bilgileri</h4>
       <div class="container">
-        <div class="row gap-3">
+        <div
+          class="row gap-5"
+          *ngIf="currentUser.addresses.length > 0; else noAddress"
+        >
           <div
             class="address col-md-4 col-12"
             *ngFor="let address of currentUser.addresses"
           >
-            <div class="mb-2">{{ address.addressLine }}</div>
-            <div class="mb-2">{{ address.addressLine2 }}</div>
-            <div class="mb-2">{{ address.city }}</div>
-            <div class="mb-2">{{ address.country }}</div>
+            <div class="d-flex justify-content-between">
+              <div class="infos">
+                <div class="mb-2">{{ address.addressLine }}</div>
+                <div class="mb-2">{{ address.addressLine2 }}</div>
+                <div class="mb-2">{{ address.city }}</div>
+                <div class="mb-2">{{ address.country }}</div>
+              </div>
+              <div class="options">
+                <i
+                  class="fa-solid fa-trash"
+                  title="Sil"
+                  (click)="deleteAddress(address)"
+                ></i>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -45,3 +59,8 @@
     </div>
   </div>
 </div>
+<ng-template #noAddress>
+  <div class="noAddress">
+    <p>Adres bulunamadı.</p>
+  </div>
+</ng-template>

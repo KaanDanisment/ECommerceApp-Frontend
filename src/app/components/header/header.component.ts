@@ -3,8 +3,11 @@ import { CommonModule } from '@angular/common';
 import { SubcategoryService } from '../../services/SubcategoryService/subcategory.service';
 import { Subcategory } from '../../models/subcategory.model';
 import { Router, RouterModule } from '@angular/router';
-import { catchError, Observable, of, throwError } from 'rxjs';
+import { catchError, Observable, of, take, throwError } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from '../../services/AuthService/auth.service';
+import { AccountService } from '../../services/AccountService/account.service';
+import { User } from '../../models/user.model';
 
 @Component({
   selector: 'app-header',
@@ -15,18 +18,20 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class HeaderComponent {
   subcategories$!: Observable<Subcategory[]>;
-  isAuthenticated!: boolean;
+  isAuthenticated$!: Observable<boolean>;
   dropdownOpen = false;
   navbarOpen = false;
   accountDropdownOpen = false;
 
   constructor(
     private subcategoryService: SubcategoryService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.loadSubcategories();
+    this.isAuthenticated$ = this.authService.isAuthenticated$;
   }
 
   loadSubcategories(): void {
@@ -36,6 +41,10 @@ export class HeaderComponent {
         return throwError(() => error);
       })
     );
+  }
+
+  logout(): void {
+    this.authService.logout();
   }
 
   toggleDropdown(): void {

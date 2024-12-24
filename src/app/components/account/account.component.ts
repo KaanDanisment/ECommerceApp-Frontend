@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { AccountService } from '../../services/AccountService/account.service';
 import { AuthService } from '../../services/AuthService/auth.service';
-import { catchError, Observable, tap } from 'rxjs';
 import { User } from '../../models/user.model';
 import { CommonModule } from '@angular/common';
-import { UserDto } from '../../models/Dtos/userDto.model';
-import { AddressDto } from '../../models/Dtos/AddressDto.model';
+import { AddressDto } from '../../models/Dtos/addressDto.model';
+import { ToastrService } from 'ngx-toastr';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-account',
@@ -20,21 +20,31 @@ export class AccountComponent {
 
   constructor(
     private accountService: AccountService,
-    private authService: AuthService
+    private authService: AuthService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit() {
     this.currentUser$ = this.accountService.currentUser$;
-    if (this.currentUser$ != null) {
-      this.getCurrentUserInfo();
-    }
+    this.getCurrentUserInfo();
   }
 
   getCurrentUserInfo(): void {
     this.accountService.getUserInfo();
   }
 
-  deleteAddress(address: AddressDto): void {}
+  deleteAddress(address: AddressDto): void {
+    this.accountService.deleteAddress(address).subscribe({
+      next: () => {
+        this.toastr.success('Adres başarıyla silindi');
+        this.getCurrentUserInfo();
+      },
+      error: (err) => {
+        console.error(err.message, err.error);
+        this.toastr.error(`${err.message}`);
+      },
+    });
+  }
 
   logout(): void {
     this.authService.logout();

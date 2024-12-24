@@ -29,5 +29,33 @@
 }
 .address {
   border: 1px solid rgb(230, 221, 221);
-  padding: 1rem 0 1rem 1rem;
+  padding: 1rem 2rem 1rem 1rem;
+  border-radius: 5px;
+}
+.options {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+.options i {
+  cursor: pointer;
+}
+.infos {
+  max-width: 80%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+.infos div {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.noAddress {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 10rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: rgb(128, 128, 128);
 }

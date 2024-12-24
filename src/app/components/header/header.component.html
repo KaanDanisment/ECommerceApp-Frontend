@@ -145,11 +145,18 @@
       </ul>
       <div class="user_option">
         <a [routerLink]="['/account']">
-          <i class="fa fa-user" aria-hidden="true"></i>
+          <i class="fa fa-user" aria-hidden="true" title="Hesap"></i>
         </a>
         <a>
-          <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+          <i class="fa fa-shopping-bag" aria-hidden="true" title="Sepet"></i>
         </a>
+        <div *ngIf="isAuthenticated$ | async">
+          <i
+            class="fa fa-right-from-bracket"
+            title="Çıkış Yap"
+            (click)="logout()"
+          ></i>
+        </div>
       </div>
     </div>
   </nav>

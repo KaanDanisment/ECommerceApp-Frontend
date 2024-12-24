@@ -7,6 +7,7 @@ export class User {
   email: string;
   phoneNumber: string;
   addresses: Array<{
+    id: number;
     addressLine: string;
     addressLine2: string;
     city: string;

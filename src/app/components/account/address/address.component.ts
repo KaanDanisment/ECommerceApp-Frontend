@@ -7,7 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { AddressDto } from '../../../models/Dtos/AddressDto.model';
+import { AddressDto } from '../../../models/Dtos/addressDto.model';
 import { AccountService } from '../../../services/AccountService/account.service';
 import { ToastrService } from 'ngx-toastr';
 

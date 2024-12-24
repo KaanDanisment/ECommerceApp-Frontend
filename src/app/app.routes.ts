@@ -21,4 +21,5 @@ export const routes: Routes = [
       { path: 'update-user', component: UpdateUserComponent },
     ],
   },
+  { path: '**', redirectTo: '', pathMatch: 'full' }, // Wildcard route
 ];
