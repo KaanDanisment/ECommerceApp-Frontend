@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, map, Observable, throwError } from 'rxjs';
+import { catchError, map, Observable, tap, throwError } from 'rxjs';
 import { Category } from '../../models/category.model';
 import { CategoryDto } from '../../models/Dtos/categoryDto.model';
 
@@ -12,7 +12,7 @@ export class CategoryService {
   constructor(private http: HttpClient) {}
 
   getCategories(): Observable<Category[]> {
-    return this.http.get<CategoryDto[]>(this.apiUrl).pipe(
+    return this.http.get<CategoryDto[]>(this.apiUrl + '/getall').pipe(
       map((response: CategoryDto[]) =>
         response.map((dto) => new Category(dto))
       ),

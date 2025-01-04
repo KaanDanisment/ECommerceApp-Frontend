@@ -14,7 +14,7 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [RouterModule, FormsModule, ReactiveFormsModule],
+  imports: [RouterModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
@@ -44,16 +44,20 @@ export class LoginComponent {
   }
 
   login() {
-    this.user = Object.assign({}, this.loginForm.value);
-    this.authService.userLogin(this.user).subscribe({
-      next: () => {
-        this.router.navigateByUrl(this.returnUrl);
-        this.toastr.success('Giriş yapıldı');
-      },
-      error: (err) => {
-        console.error(err.message, err.error);
-        this.toastr.error(`${err.message}`);
-      },
-    });
+    if (this.loginForm.valid) {
+      this.user = Object.assign({}, this.loginForm.value);
+      this.authService.userLogin(this.user).subscribe({
+        next: () => {
+          this.router.navigateByUrl(this.returnUrl);
+          this.toastr.success('Giriş yapıldı');
+        },
+        error: (err) => {
+          console.error(err.message, err.error);
+          this.toastr.error(`${err.message}`);
+        },
+      });
+    } else {
+      this.toastr.error('Mail adresinizi ve şifrenizi giriniz');
+    }
   }
 }

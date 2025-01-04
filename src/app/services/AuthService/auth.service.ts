@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
   private apiUrl = 'https://localhost:7281/api/auth';
-  private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
+  private isAuthenticatedSubject = new BehaviorSubject<boolean | null>(null);
   isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
   constructor(private http: HttpClient, private router: Router) {}

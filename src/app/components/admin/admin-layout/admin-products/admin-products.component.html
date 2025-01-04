@@ -1,0 +1,53 @@
+<div class="content">
+  <div class="search">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="search" placeholder="Id, Ürün Adı" />
+  </div>
+  <button
+    class="btn btn-dark create-product"
+    [routerLink]="['/admin/products/create']"
+  >
+    Yeni ürün ekle
+  </button>
+  <button class="btn btn-secondary filter-product">Filtrele</button>
+  <div class="table-container">
+    <table class="table table-striped resizable">
+      <thead>
+        <tr>
+          <th class="resizable-column">Id</th>
+          <th class="resizable-column">Ürün Adı</th>
+          <th class="resizable-column">Renk</th>
+          <th class="resizable-column">Beden</th>
+          <th class="resizable-column">Açıklama</th>
+          <th class="resizable-column">Fiyat</th>
+          <th class="resizable-column">Stok</th>
+          <th class="resizable-column">Kategori</th>
+          <th class="resizable-column">Alt Kategori</th>
+          <th class="resizable-column">Oluşturulma Tarihi</th>
+        </tr>
+      </thead>
+      <tbody *ngIf="products$ | async as products; else loading">
+        <tr *ngFor="let product of products">
+          <td>{{ product.id }}</td>
+          <td>{{ product.name }}</td>
+          <td>{{ product.color }}</td>
+          <td>{{ product.size }}</td>
+          <td>{{ product.description }}</td>
+          <td>{{ product.price }}</td>
+          <td>{{ product.stock }}</td>
+          <td>{{ product.categoryId }}</td>
+          <td>{{ product.subcategoryId }}</td>
+          <td>{{ product.createdAt }}</td>
+        </tr>
+        <tr *ngIf="!products.length">
+          <td colspan="10" class="no-data">Ürün listeniz boş.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<ng-template #loading>
+  <div class="loading-container">
+    <div class="spinner"></div>
+  </div>
+</ng-template>

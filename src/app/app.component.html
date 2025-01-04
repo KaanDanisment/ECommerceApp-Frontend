@@ -1,5 +1,11 @@
-<div class="hero_area">
-  <app-header></app-header>
-  <router-outlet />
-  <app-about-us></app-about-us>
+<div *ngIf="!isAdminRoute">
+  <div class="hero_area">
+    <app-header></app-header>
+    <router-outlet></router-outlet>
+    <app-about-us></app-about-us>
+  </div>
+</div>
+
+<div *ngIf="isAdminRoute">
+  <router-outlet></router-outlet>
 </div>

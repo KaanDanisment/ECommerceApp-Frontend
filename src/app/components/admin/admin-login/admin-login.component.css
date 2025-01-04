@@ -1,0 +1,23 @@
+a {
+  color: black;
+}
+.login {
+  height: 100vh;
+}
+.login-form {
+  margin: 0 0 15rem;
+  padding: 15rem 35rem;
+  height: 100%;
+}
+.form-control {
+  border-width: 1px;
+  border-color: black;
+}
+.form-control:focus {
+  box-shadow: none;
+}
+.btn {
+  border-width: 2px;
+  border-color: black;
+  width: 8rem;
+}

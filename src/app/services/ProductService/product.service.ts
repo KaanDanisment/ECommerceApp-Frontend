@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, map, Observable, throwError } from 'rxjs';
+import { catchError, map, Observable, tap, throwError } from 'rxjs';
 import { Product } from '../../models/product.model';
 import { ProductDto } from '../../models/Dtos/productDto.model';
 
@@ -10,6 +10,14 @@ import { ProductDto } from '../../models/Dtos/productDto.model';
 export class ProductService {
   private apiUrl = 'https://localhost:7281/api/product';
   constructor(private http: HttpClient) {}
+
+  getAllProducts(): Observable<Product[]> {
+    return this.http.get<ProductDto[]>(this.apiUrl + '/getall').pipe(
+      tap((response) => console.log(response)),
+      map((response: ProductDto[]) => response.map((dto) => new Product(dto))),
+      catchError(this.handleError)
+    );
+  }
 
   getProductsByCategoryId(categoryId: number): Observable<Product[]> {
     return this.http
@@ -38,6 +46,15 @@ export class ProductService {
       map((response: ProductDto[]) => response.map((dto) => new Product(dto))),
       catchError(this.handleError)
     );
+  }
+
+  createProduct(formData: FormData) {
+    formData.forEach((value, key) => {
+      console.log(`${key}: ${value}`);
+    });
+    return this.http
+      .post(this.apiUrl, formData)
+      .pipe(catchError(this.handleError));
   }
 
   private handleError(error: HttpErrorResponse): Observable<never> {

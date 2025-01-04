@@ -46,16 +46,20 @@ export class RegisterComponent {
   }
 
   register() {
-    this.user = Object.assign({}, this.registerForm.value);
-    this.authService.userRegister(this.user).subscribe({
-      next: () => {
-        this.toastr.success('Kayıt işlemi başarılı');
-        this.router.navigate(['/account/login']);
-      },
-      error: (err) => {
-        console.error(err.message, err.error);
-        this.toastr.error(`${err.message}`);
-      },
-    });
+    if (this.registerForm.valid) {
+      this.user = Object.assign({}, this.registerForm.value);
+      this.authService.userRegister(this.user).subscribe({
+        next: () => {
+          this.toastr.success('Kayıt işlemi başarılı');
+          this.router.navigate(['/account/login']);
+        },
+        error: (err) => {
+          console.error(err.message, err.error);
+          this.toastr.error(`${err.message}`);
+        },
+      });
+    } else {
+      this.toastr.error('Lütfen tüm " * " ile işaretlenmiş alanları doldurun');
+    }
   }
 }

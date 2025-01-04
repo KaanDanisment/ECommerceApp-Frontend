@@ -1,0 +1,13 @@
+.admin-container {
+  height: 100vh;
+}
+
+.main-content {
+  display: flex;
+  height: calc(100vh - 4rem); /* Subtract navbar height */
+}
+
+.page-content {
+  flex: 1;
+  overflow-y: auto;
+}

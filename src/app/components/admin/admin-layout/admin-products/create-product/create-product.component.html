@@ -1,0 +1,147 @@
+<div class="form">
+  <h3 class="mb-3">Ürün Ekle</h3>
+  <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label class="form-label" for="name">Ürün Adı *</label>
+      <input
+        type="text"
+        name="name"
+        formControlName="name"
+        class="form-control"
+      />
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="price">Renk *</label>
+      <input
+        type="text"
+        name="color"
+        formControlName="color"
+        class="form-control"
+      />
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="size">Beden</label>
+      <input
+        type="text"
+        name="size"
+        formControlName="size"
+        class="form-control"
+      />
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="price">Fiyat *</label>
+      <input
+        type="number"
+        name="price"
+        formControlName="price"
+        class="form-control"
+      />
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="description">Açıklama *</label>
+      <textarea
+        name="description"
+        formControlName="description"
+        class="form-control"
+      ></textarea>
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="stock">Stok *</label>
+      <input
+        type="number"
+        name="stock"
+        formControlName="stock"
+        class="form-control"
+      />
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Resim *</label>
+      <div class="input-group">
+        <input
+          type="file"
+          name="image"
+          id="image"
+          class="form-control"
+          multiple
+          (change)="onFileSelected($event)"
+          #fileInput
+          hidden
+        />
+        <label for="image" class="btn btn-secondary"> Resim Seç </label>
+        <span class="ms-2 mt-1" *ngIf="!selectedImages?.length"
+          >Resim seçilmedi</span
+        >
+        <span class="ms-2 mt-2" *ngIf="selectedImages?.length"
+          >{{ selectedImages.length }} resim seçildi</span
+        >
+      </div>
+    </div>
+
+    <div *ngIf="previewUrls.length > 0" class="mb-3 image-previews">
+      <p>Seçilen Resimler:</p>
+      <div
+        *ngFor="let url of previewUrls; let i = index"
+        class="image-container"
+        id="image-container"
+      >
+        <img [src]="url" [alt]="url" />
+        <label class="delete-btn" for="image-container" (click)="removeImage(i)"
+          >×</label
+        >
+      </div>
+    </div>
+
+    <ng-container *ngIf="categories$ | async as categories; else loading">
+      <div class="mb-3">
+        <label class="form-label" for="category">Kategori *</label>
+        <select
+          class="form-select"
+          name="category"
+          formControlName="categoryId"
+          (change)="onCategoryChange($event)"
+        >
+          <option value="" style="color: #999999" selected>
+            --Kategori Seçiniz--
+          </option>
+          <option [ngValue]="category.id" *ngFor="let category of categories">
+            {{ category.name }}
+          </option>
+        </select>
+      </div>
+      <ng-container *ngIf="subcategories$ | async as subcategories">
+        <div class="mb-3">
+          <label class="form-label" for="subcategory">Alt Kategori *</label>
+          <select
+            class="form-select"
+            name="subcategory"
+            formControlName="subcategoryId"
+          >
+            <option value="" style="color: #999999" selected>
+              --Alt Kategori Seçiniz--
+            </option>
+            <option
+              [ngValue]="subcategory.id"
+              *ngFor="let subcategory of subcategories"
+            >
+              {{ subcategory.name }}
+            </option>
+          </select>
+        </div>
+      </ng-container>
+    </ng-container>
+    <ng-template #loading>
+      <div class="category-loading">
+        <p>Kategoriler Yükleniyor...</p>
+        <div class="category-spinner"></div>
+      </div>
+    </ng-template>
+    <div class="d-flex justify-content-between">
+      <button type="submit" class="btn btn-dark">Ürün Ekle</button>
+    </div>
+  </form>
+  <div class="loading-overlay" *ngIf="isLoading">
+    <div class="loading-content">
+      <p class="mt-3">Ürün Ekleniyor, Lütfen Bekleyin...</p>
+    </div>
+  </div>
+</div>

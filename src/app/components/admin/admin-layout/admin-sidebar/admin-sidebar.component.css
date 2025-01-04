@@ -1,0 +1,33 @@
+.sidebar {
+  height: calc(100vh - 4rem); /* Subtract navbar height */
+  width: 7rem;
+  padding-top: 2rem;
+  padding-right: 2rem;
+  border-right: 2px solid black;
+  overflow-y: auto;
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    list-style: none;
+    font-weight: bold;
+  }
+  li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      border-radius: 8px;
+      transform: scale(1.1);
+    }
+  }
+  i {
+    font-size: 1.2rem;
+  }
+}

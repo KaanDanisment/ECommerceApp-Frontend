@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, map, Observable, throwError } from 'rxjs';
+import { catchError, map, Observable, tap, throwError } from 'rxjs';
 import { Subcategory } from '../../models/subcategory.model';
 import { SubcategoryDto } from '../../models/Dtos/subcategoryDto.model';
 
@@ -34,6 +34,7 @@ export class SubcategoryService {
         map((response: SubcategoryDto[]) =>
           response.map((dto) => new Subcategory(dto))
         ),
+        tap((response) => console.log(response)),
         catchError(this.handleError)
       );
   }

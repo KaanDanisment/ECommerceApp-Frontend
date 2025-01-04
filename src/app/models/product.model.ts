@@ -9,7 +9,7 @@ export class Product {
   price: number;
   stock: number;
   categoryId: number;
-  createdAt: string; // Date yerine string olarak değiştirdik
+  createdAt: string;
   subcategoryId: number;
   imageUrls: string[];
 
