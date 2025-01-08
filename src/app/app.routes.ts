@@ -15,6 +15,9 @@ import { AdminOrdersComponent } from './components/admin/admin-layout/admin-orde
 import { AdminCustomersComponent } from './components/admin/admin-layout/admin-customers/admin-customers.component';
 import { AdminProductsComponent } from './components/admin/admin-layout/admin-products/admin-products.component';
 import { CreateProductComponent } from './components/admin/admin-layout/admin-products/create-product/create-product.component';
+import { AdminCategoriesComponent } from './components/admin/admin-layout/admin-categories/admin-categories.component';
+import { CreateCategoryComponent } from './components/admin/admin-layout/admin-categories/create-category/create-category.component';
+import { UpdateCategoriesComponent } from './components/admin/admin-layout/admin-categories/update-categories/update-categories.component';
 
 export const routes: Routes = [
   { path: '', component: IndexComponent },
@@ -38,11 +41,15 @@ export const routes: Routes = [
         path: '',
         component: AdminLayoutComponent,
         children: [
+          { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
           { path: 'dashboard', component: DashboardComponent },
           { path: 'products', component: AdminProductsComponent },
           { path: 'products/create', component: CreateProductComponent },
           { path: 'orders', component: AdminOrdersComponent },
           { path: 'customers', component: AdminCustomersComponent },
+          { path: 'categories', component: AdminCategoriesComponent },
+          { path: 'categories/create', component: CreateCategoryComponent },
+          { path: 'categories/update', component: UpdateCategoriesComponent },
         ],
       },
     ],

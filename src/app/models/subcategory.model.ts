@@ -2,7 +2,7 @@ export class Subcategory {
   id: number;
   name: string;
   categoryId: number;
-  imageUrl: number[];
+  imageUrl: string;
 
   constructor(subcategoryDto: Subcategory) {
     this.id = subcategoryDto.id;

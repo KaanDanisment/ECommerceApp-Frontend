@@ -16,11 +16,11 @@ import { AccountService } from '../../services/AccountService/account.service';
   styleUrl: './header.component.css',
 })
 export class HeaderComponent {
-  subcategories$!: Observable<Subcategory[]>;
   isAuthenticated$!: Observable<boolean | null>;
   dropdownOpen = false;
   navbarOpen = false;
   accountDropdownOpen = false;
+  subcategories$!: Observable<Subcategory[] | null>;
 
   constructor(
     private subcategoryService: SubcategoryService,
@@ -29,18 +29,15 @@ export class HeaderComponent {
   ) {}
 
   ngOnInit(): void {
+    this.subcategories$ = this.subcategoryService.subcategories$;
     this.loadSubcategories();
+    console.log('header');
     this.isAuthenticated$ = this.authService.isAuthenticated$;
     this.authService.isAuthenticated().subscribe();
   }
 
   loadSubcategories(): void {
-    this.subcategories$ = this.subcategoryService.getSubcategories().pipe(
-      catchError((error) => {
-        this.toastr.error(error.message);
-        return throwError(() => error);
-      })
-    );
+    this.subcategoryService.getSubcategories(false).subscribe();
   }
 
   logout(): void {

@@ -1,6 +1,13 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, map, Observable, tap, throwError } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  map,
+  Observable,
+  tap,
+  throwError,
+} from 'rxjs';
 import { Product } from '../../models/product.model';
 import { ProductDto } from '../../models/Dtos/productDto.model';
 
@@ -9,12 +16,21 @@ import { ProductDto } from '../../models/Dtos/productDto.model';
 })
 export class ProductService {
   private apiUrl = 'https://localhost:7281/api/product';
+
+  private productsSubject = new BehaviorSubject<Product[]>([]);
+  products$ = this.productsSubject.asObservable();
+
   constructor(private http: HttpClient) {}
 
   getAllProducts(): Observable<Product[]> {
     return this.http.get<ProductDto[]>(this.apiUrl + '/getall').pipe(
-      tap((response) => console.log(response)),
-      map((response: ProductDto[]) => response.map((dto) => new Product(dto))),
+      map((productsDto: ProductDto[]) =>
+        productsDto.map((dto) => new Product(dto))
+      ),
+      tap((products) => {
+        console.log(products);
+        this.productsSubject.next(products);
+      }),
       catchError(this.handleError)
     );
   }
@@ -26,6 +42,10 @@ export class ProductService {
         map((response: ProductDto[]) =>
           response.map((dto) => new Product(dto))
         ),
+        tap((products) => {
+          console.log(products);
+          this.productsSubject.next(products);
+        }),
         catchError(this.handleError)
       );
   }
@@ -37,6 +57,10 @@ export class ProductService {
         map((response: ProductDto[]) =>
           response.map((dto) => new Product(dto))
         ),
+        tap((products) => {
+          console.log(products);
+          this.productsSubject.next(products);
+        }),
         catchError(this.handleError)
       );
   }

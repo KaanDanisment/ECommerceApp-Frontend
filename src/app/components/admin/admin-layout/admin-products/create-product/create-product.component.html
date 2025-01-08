@@ -135,8 +135,11 @@
         <div class="category-spinner"></div>
       </div>
     </ng-template>
-    <div class="d-flex justify-content-between">
+    <div class="d-flex gap-3">
       <button type="submit" class="btn btn-dark">Ürün Ekle</button>
+      <button [routerLink]="['/admin/products']" class="btn btn-outline-dark">
+        İptal
+      </button>
     </div>
   </form>
   <div class="loading-overlay" *ngIf="isLoading">

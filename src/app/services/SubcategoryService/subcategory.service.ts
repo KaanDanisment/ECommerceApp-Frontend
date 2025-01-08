@@ -1,6 +1,13 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, map, Observable, tap, throwError } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  map,
+  Observable,
+  tap,
+  throwError,
+} from 'rxjs';
 import { Subcategory } from '../../models/subcategory.model';
 import { SubcategoryDto } from '../../models/Dtos/subcategoryDto.model';
 
@@ -9,13 +16,29 @@ import { SubcategoryDto } from '../../models/Dtos/subcategoryDto.model';
 })
 export class SubcategoryService {
   private apiUrl = 'https://localhost:7281/api/subcategory';
+
+  private subcategoriesSubject = new BehaviorSubject<Subcategory[]>([]);
+  subcategories$ = this.subcategoriesSubject.asObservable();
+
   constructor(private http: HttpClient) {}
 
-  getSubcategories(): Observable<Subcategory[]> {
-    return this.http.get<SubcategoryDto[]>(this.apiUrl).pipe(
-      map((response: SubcategoryDto[]) =>
-        response.map((dto) => new Subcategory(dto))
-      ),
+  getSubcategories(forceRefresh: boolean): Observable<Subcategory[]> {
+    // Force refresh veya cache boş ise API'den çek
+    if (forceRefresh || this.subcategoriesSubject.value.length === 0) {
+      console.log('Subcategories fetched from API');
+      return this.refreshSubcategories();
+    }
+    console.log('Subcategories fetched from cache');
+    return this.subcategories$;
+  }
+  private refreshSubcategories(): Observable<Subcategory[]> {
+    return this.http.get<Subcategory[]>(this.apiUrl).pipe(
+      map((response: SubcategoryDto[]) => {
+        console.log(typeof response);
+        response.map((dto) => new Subcategory(dto));
+        return response;
+      }),
+      tap((response) => this.subcategoriesSubject.next(response)),
       catchError(this.handleError)
     );
   }
@@ -34,9 +57,35 @@ export class SubcategoryService {
         map((response: SubcategoryDto[]) =>
           response.map((dto) => new Subcategory(dto))
         ),
-        tap((response) => console.log(response)),
         catchError(this.handleError)
       );
+  }
+
+  createSubcategory(formData: FormData) {
+    formData.forEach((value, key) => {
+      console.log(`${key}: ${value}`);
+    });
+    return this.http.post(this.apiUrl, formData).pipe(
+      tap(() => this.refreshSubcategories),
+      catchError(this.handleError)
+    );
+  }
+
+  updateSubcategory(formData: FormData) {
+    formData.forEach((value, key) => {
+      console.log(`${key}: ${value}`);
+    });
+    return this.http.put(this.apiUrl, formData).pipe(
+      tap(() => this.refreshSubcategories),
+      catchError(this.handleError)
+    );
+  }
+
+  deleteSubcategory(id: number) {
+    return this.http.delete(this.apiUrl + '/' + id).pipe(
+      tap(() => this.refreshSubcategories),
+      catchError(this.handleError)
+    );
   }
 
   private handleError(error: HttpErrorResponse): Observable<never> {

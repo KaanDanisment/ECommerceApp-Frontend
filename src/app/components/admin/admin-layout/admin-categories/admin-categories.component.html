@@ -1,0 +1,107 @@
+<div class="container pt-5">
+  <div class="row" *ngIf="categories$ | async as categories">
+    <div
+      class="categories col-12 col-md-6 col-lg-2"
+      *ngFor="let category of categories"
+    >
+      <h4>{{ category.name }}</h4>
+      <div *ngIf="subcategories$ | async as subcategories">
+        <div *ngFor="let subcategory of subcategories">
+          <div
+            class="subcategories"
+            *ngIf="subcategory.categoryId == category.id"
+          >
+            <div>
+              <p
+                class="subcategory-name"
+                [ngClass]="{ active: selectedSubcategory === subcategory }"
+                (click)="subcategorySelected(subcategory)"
+                (click)="loadProductsBySubcategoryId(subcategory.id)"
+              >
+                {{ subcategory.name }}
+              </p>
+            </div>
+            <div class="options">
+              <i
+                class="fa-solid fa-pen-to-square"
+                title="Düzenle"
+                (click)="editSubcategory(subcategory)"
+              ></i>
+              <i
+                class="fa-solid fa-trash"
+                style="color: #be0710"
+                title="Sil"
+                (click)="deleteSubcategory(subcategory.id)"
+              ></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="subcategory-products-container col-12 col-md-4">
+      <button
+        class="add-subcategory-button btn btn-sm btn-dark"
+        [routerLink]="['/admin/categories/create']"
+      >
+        Yeni alt kategori ekle
+      </button>
+      <div *ngIf="products$ | async as products; else noSelectedSubcategory">
+        <div
+          *ngIf="products.length > 0; else noSubcategoryProducts"
+          class="subcategory-products"
+        >
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Ürün</th>
+                <th>Stok</th>
+                <th>Açık Sipariş Sayısı</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let product of products; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.stock }}</td>
+                <td>{{ product.id }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <ng-template #noSubcategoryProducts>
+        <div class="no-subcategory-products">
+          <p>Seçili alt kategoride ürün yok.</p>
+        </div>
+      </ng-template>
+      <ng-template #noSelectedSubcategory>
+        <div class="no-subcategory-products">
+          <p>Seçilen alt kategorinin ürünleri burada görüntülenecek</p>
+        </div>
+      </ng-template>
+    </div>
+    <div class="subcategory-img-container col-12 col-md-6">
+      <div *ngIf="selectedSubcategory != null" class="subcategory-img">
+        <img
+          *ngIf="selectedSubcategory.imageUrl != null; else noSubcategoryImage"
+          [src]="selectedSubcategory.imageUrl"
+          alt="Subcategory Image"
+        />
+      </div>
+      <ng-template #noSubcategoryImage>
+        <div class="no-subcategory-img">
+          <p>Seçili alt kategorinin resmi yok.</p>
+        </div>
+      </ng-template>
+      <div *ngIf="selectedSubcategory == null" class="no-subcategory-img">
+        <p>Seçilen alt kategori resmi burada görüntülenecek.</p>
+      </div>
+    </div>
+  </div>
+  <div class="loading-overlay" *ngIf="isLoading">
+    <div class="loading-content">
+      <p class="mt-3">Alt Kategori Güncelleniyor, Lütfen Bekleyin...</p>
+    </div>
+  </div>
+</div>

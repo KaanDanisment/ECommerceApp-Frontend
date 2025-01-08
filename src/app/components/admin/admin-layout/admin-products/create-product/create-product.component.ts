@@ -13,12 +13,12 @@ import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { Subcategory } from '../../../../../models/subcategory.model';
 import { ProductService } from '../../../../../services/ProductService/product.service';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-create-product',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, RouterModule],
   templateUrl: './create-product.component.html',
   styleUrl: './create-product.component.css',
 })

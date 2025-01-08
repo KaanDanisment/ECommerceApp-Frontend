@@ -10,11 +10,11 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [RouterOutlet, HeaderComponent, AboutUsComponent, CommonModule],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
   title = 'ECommerceAppClient';
-  isAdminRoute = false;
+  isAdminRoute!: boolean;
 
   constructor(private router: Router) {
     this.router.events

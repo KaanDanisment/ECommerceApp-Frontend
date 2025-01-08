@@ -11,4 +11,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
   templateUrl: './admin-layout.component.html',
   styleUrl: './admin-layout.component.css',
 })
-export class AdminLayoutComponent {}
+export class AdminLayoutComponent {
+  ngOnInit() {
+    console.log('admin');
+  }
+}
