@@ -18,6 +18,7 @@ import { CreateProductComponent } from './components/admin/admin-layout/admin-pr
 import { AdminCategoriesComponent } from './components/admin/admin-layout/admin-categories/admin-categories.component';
 import { CreateCategoryComponent } from './components/admin/admin-layout/admin-categories/create-category/create-category.component';
 import { UpdateCategoriesComponent } from './components/admin/admin-layout/admin-categories/update-categories/update-categories.component';
+import { UpdateProductComponent } from './components/admin/admin-layout/admin-products/update-product/update-product.component';
 
 export const routes: Routes = [
   { path: '', component: IndexComponent },
@@ -45,6 +46,7 @@ export const routes: Routes = [
           { path: 'dashboard', component: DashboardComponent },
           { path: 'products', component: AdminProductsComponent },
           { path: 'products/create', component: CreateProductComponent },
+          { path: 'products/update', component: UpdateProductComponent },
           { path: 'orders', component: AdminOrdersComponent },
           { path: 'customers', component: AdminCustomersComponent },
           { path: 'categories', component: AdminCategoriesComponent },

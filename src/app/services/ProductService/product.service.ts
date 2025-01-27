@@ -5,6 +5,7 @@ import {
   catchError,
   map,
   Observable,
+  of,
   tap,
   throwError,
 } from 'rxjs';
@@ -17,22 +18,112 @@ import { ProductDto } from '../../models/Dtos/productDto.model';
 export class ProductService {
   private apiUrl = 'https://localhost:7281/api/product';
 
-  private productsSubject = new BehaviorSubject<Product[]>([]);
+  productsSubject = new BehaviorSubject<Product[]>([]);
   products$ = this.productsSubject.asObservable();
+
+  totalPages!: Observable<number>;
+  totalProducts!: Observable<number>;
 
   constructor(private http: HttpClient) {}
 
-  getAllProducts(): Observable<Product[]> {
-    return this.http.get<ProductDto[]>(this.apiUrl + '/getall').pipe(
-      map((productsDto: ProductDto[]) =>
-        productsDto.map((dto) => new Product(dto))
-      ),
+  getProducts(forceRefresh: boolean, page?: number): Observable<Product[]> {
+    if (forceRefresh || this.productsSubject.value.length === 0) {
+      console.log('Products fetched from API');
+      return this.refreshProducts(page);
+    }
+    console.log('Products fetched from cache');
+    return this.products$;
+  }
+
+  private refreshProducts(page?: number): Observable<Product[]> {
+    const url = page
+      ? this.apiUrl + `/getall?page=${page}`
+      : this.apiUrl + '/getall';
+
+    return this.http.get<any>(url).pipe(
+      map((response) => {
+        this.totalPages = of(response.totalPages);
+        this.totalProducts = of(response.totalItems);
+        return response.items.map((dto: ProductDto) => new Product(dto));
+      }),
       tap((products) => {
-        console.log(products);
-        this.productsSubject.next(products);
+        if (url == this.apiUrl + '/getall') {
+          return products;
+        } else {
+          if (this.productsSubject.value.length == 0) {
+            console.log(products);
+            this.productsSubject.next(products);
+          } else {
+            console.log(products);
+            this.productsSubject.next([
+              ...this.productsSubject.value,
+              ...products,
+            ]);
+          }
+        }
       }),
       catchError(this.handleError)
     );
+  }
+
+  sortProducts(sortBy: string, page?: number): Observable<Product[]> {
+    const url = page
+      ? this.apiUrl + `/getall?page=${page}&sortBy=${sortBy}`
+      : this.apiUrl + `/getall?sortBy=${sortBy}`;
+
+    return this.http.get<any>(url).pipe(
+      map((response) =>
+        response.items.map((dto: ProductDto) => new Product(dto))
+      ),
+      tap((products) => {
+        if (url == this.apiUrl + `/getall?sortBy=${sortBy}`) {
+          return products;
+        } else {
+          console.log(products);
+          this.productsSubject.next([
+            ...this.productsSubject.value,
+            ...products,
+          ]);
+        }
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  //prettier-ignore
+  sortProductsByCategory(sortBy: string, categoryId: number): Observable<Product[]> {
+    return this.http
+      .get<ProductDto[]>(
+        this.apiUrl + `/getbycategoryid/${categoryId}?sortBy=${sortBy}`
+      )
+      .pipe(
+        map((response: ProductDto[]) =>
+          response.map((dto: ProductDto) => new Product(dto))
+        ),
+        tap((products) => {
+          console.log(products);
+          return products;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  //prettier-ignore
+  sortProductsBySubcategory(sortBy: string, subcategoryId: number): Observable<Product[]> {
+    return this.http
+      .get<ProductDto[]>(
+        this.apiUrl + `/getbysubcategoryid/${subcategoryId}?sortBy=${sortBy}`
+      )
+      .pipe(
+        map((response: ProductDto[]) =>
+          response.map((dto: ProductDto) => new Product(dto))
+        ),
+        tap((products) => {
+          console.log(products);
+          return products;
+        }),
+        catchError(this.handleError)
+      );
   }
 
   getProductsByCategoryId(categoryId: number): Observable<Product[]> {
@@ -40,11 +131,11 @@ export class ProductService {
       .get<ProductDto[]>(this.apiUrl + '/getbycategoryid/' + categoryId)
       .pipe(
         map((response: ProductDto[]) =>
-          response.map((dto) => new Product(dto))
+          response.map((dto: ProductDto) => new Product(dto))
         ),
         tap((products) => {
           console.log(products);
-          this.productsSubject.next(products);
+          return products;
         }),
         catchError(this.handleError)
       );
@@ -55,14 +146,21 @@ export class ProductService {
       .get<ProductDto[]>(this.apiUrl + '/getbysubcategoryid/' + subcategoryId)
       .pipe(
         map((response: ProductDto[]) =>
-          response.map((dto) => new Product(dto))
+          response.map((dto: ProductDto) => new Product(dto))
         ),
         tap((products) => {
           console.log(products);
-          this.productsSubject.next(products);
+          return products;
         }),
         catchError(this.handleError)
       );
+  }
+
+  getProductById(id: number): Observable<Product> {
+    return this.http.get<ProductDto>(this.apiUrl + '/' + id).pipe(
+      map((response: ProductDto) => new Product(response)),
+      catchError(this.handleError)
+    );
   }
 
   getLatestProducts(): Observable<Product[]> {
@@ -78,6 +176,27 @@ export class ProductService {
     });
     return this.http
       .post(this.apiUrl, formData)
+      .pipe(catchError(this.handleError));
+  }
+
+  updateProduct(formData: FormData) {
+    formData.forEach((value, key) => {
+      if (value instanceof File) {
+        console.log(
+          `File - ${key}: ${value.name}, size: ${value.size}, type: ${value.type}`
+        );
+      } else {
+        console.log(`${key}: ${value}`);
+      }
+    });
+    return this.http
+      .put(this.apiUrl, formData)
+      .pipe(catchError(this.handleError));
+  }
+
+  deleteProduct(id: number) {
+    return this.http
+      .delete(this.apiUrl + '/' + id)
       .pipe(catchError(this.handleError));
   }
 
@@ -103,7 +222,7 @@ export class ProductService {
         errorMessage = 'Bu işlem için yetkiniz bulunmuyor.';
         break;
       case 404:
-        errorMessage = error.error.message;
+        errorMessage = 'İstenen kaynak bulunamadı.';
         break;
       case 429:
         errorMessage = 'Çok fazla istek gönderildi. Lütfen biraz bekleyin.';

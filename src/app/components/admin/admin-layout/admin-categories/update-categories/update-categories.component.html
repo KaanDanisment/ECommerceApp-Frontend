@@ -24,6 +24,9 @@
           hidden
         />
         <label for="image" class="btn btn-secondary">Resim Seç</label>
+        <span class="ms-2 mt-1" *ngIf="!selectedImage && !previewUrl"
+          >Resim seçilmedi</span
+        >
         <span class="ms-2 mt-1" *ngIf="selectedImage">{{
           selectedImage.name
         }}</span>

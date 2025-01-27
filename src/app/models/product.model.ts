@@ -6,11 +6,13 @@ export class Product {
   color: string;
   size: string;
   description: string;
-  price: number;
+  price: string;
   stock: number;
+  categoryName: string;
   categoryId: number;
-  createdAt: string;
+  subcategoryName: string;
   subcategoryId: number;
+  createdAt: string;
   imageUrls: string[];
 
   constructor(productDto: ProductDto) {
@@ -19,9 +21,15 @@ export class Product {
     this.color = productDto.color;
     this.size = productDto.size;
     this.description = productDto.description;
-    this.price = productDto.price;
+    this.price = new Intl.NumberFormat('en-US', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
+    }).format(productDto.price);
     this.stock = productDto.stock;
+    this.categoryName = productDto.categoryName;
     this.categoryId = productDto.categoryId;
+    this.subcategoryName = productDto.subcategoryName;
+    this.subcategoryId = productDto.subcategoryId;
     // Tarihi formatla
     this.createdAt = new Date(productDto.createdAt).toLocaleDateString(
       'tr-TR',
@@ -31,7 +39,6 @@ export class Product {
         year: 'numeric',
       }
     );
-    this.subcategoryId = productDto.subcategoryId;
     this.imageUrls = productDto.imageUrls;
   }
 }

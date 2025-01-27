@@ -6,8 +6,10 @@ export interface ProductDto {
   description: string;
   price: number;
   stock: number;
+  categoryName: string;
   categoryId: number;
-  createdAt: Date;
+  subcategoryName: string;
   subcategoryId: number;
+  createdAt: Date;
   imageUrls: string[];
 }

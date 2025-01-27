@@ -59,7 +59,7 @@ export class CreateProductComponent {
 
   loadCategories() {
     this.categories$ = this.categoryService.getCategories().pipe(
-      delay(5000),
+      delay(1000),
       catchError((error) => {
         this.toastr.error(error.message);
         return of([]);
@@ -122,12 +122,18 @@ export class CreateProductComponent {
       this.isLoading = true;
       this.productService
         .createProduct(formData)
-        .pipe(delay(5000))
+        .pipe(delay(1000))
         .subscribe({
           next: () => {
+            this.productService.productsSubject.next([]);
             this.isLoading = false;
             this.toastr.success('Ürün başarıyla eklendi');
-            this.router.navigateByUrl('/admin/products');
+            const confirmed = window.confirm(
+              'Aynı ürün için farklı bir beden veya renk eklemek ister misiniz?'
+            );
+            if (!confirmed) {
+              this.router.navigateByUrl('/admin/products');
+            }
           },
           error: (err) => {
             this.isLoading = false;

@@ -32,12 +32,10 @@ export class SubcategoryService {
     return this.subcategories$;
   }
   private refreshSubcategories(): Observable<Subcategory[]> {
-    return this.http.get<Subcategory[]>(this.apiUrl).pipe(
-      map((response: SubcategoryDto[]) => {
-        console.log(typeof response);
-        response.map((dto) => new Subcategory(dto));
-        return response;
-      }),
+    return this.http.get<SubcategoryDto[]>(this.apiUrl).pipe(
+      map((subcategoryDto: SubcategoryDto[]) =>
+        subcategoryDto.map((dto) => new Subcategory(dto))
+      ),
       tap((response) => this.subcategoriesSubject.next(response)),
       catchError(this.handleError)
     );
@@ -73,7 +71,13 @@ export class SubcategoryService {
 
   updateSubcategory(formData: FormData) {
     formData.forEach((value, key) => {
-      console.log(`${key}: ${value}`);
+      if (value instanceof File) {
+        console.log(
+          `File - ${key}: ${value.name}, size: ${value.size}, type: ${value.type}`
+        );
+      } else {
+        console.log(`${key}: ${value}`);
+      }
     });
     return this.http.put(this.apiUrl, formData).pipe(
       tap(() => this.refreshSubcategories),
