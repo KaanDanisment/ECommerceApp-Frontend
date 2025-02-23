@@ -1,29 +1,27 @@
 <section class="shop_section layout_padding">
   <div class="container" *ngIf="latestProducts$ | async as latestProducts">
     <div class="heading_container heading_center">
-      <h2>Latest Products</h2>
+      <h2>En Son Eklenenler</h2>
     </div>
     <div *ngIf="latestProducts.length > 0; else noProducts">
       <div class="row">
         <div class="col-12 col-md-3" *ngFor="let product of latestProducts">
-          <div class="card">
-            <img
-              src="https://giesto.com/cdn/shop/files/t88_2048x2048.jpg?v=1727034800"
-              class="card-img-top"
-            />
+          <div
+            class="card"
+            [routerLink]="['/product/single-product', product.products[0].id]"
+          >
+            <img [src]="product.imageUrls[0]" class="card-img-top" />
             <div class="card-body">
               <h5 class="card-title">{{ product.name }}</h5>
               <div class="d-flex justify-content-between">
-                <p class="card-text">{{ product.price | currency }}</p>
+                <p class="card-text">{{ product.price }}</p>
                 <p class="me-3">+</p>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="btn-box">
-        <a href=""> View All Products </a>
-      </div>
+      <div class="btn-box"></div>
     </div>
     <ng-template #noProducts>
       <div class="noProducts">

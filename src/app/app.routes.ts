@@ -19,10 +19,14 @@ import { AdminCategoriesComponent } from './components/admin/admin-layout/admin-
 import { CreateCategoryComponent } from './components/admin/admin-layout/admin-categories/create-category/create-category.component';
 import { UpdateCategoriesComponent } from './components/admin/admin-layout/admin-categories/update-categories/update-categories.component';
 import { UpdateProductComponent } from './components/admin/admin-layout/admin-products/update-product/update-product.component';
+import { SingleProductComponent } from './components/products/single-product/single-product.component';
+import { CartComponent } from './components/cart/cart.component';
 
 export const routes: Routes = [
   { path: '', component: IndexComponent },
-  { path: 'product', component: ProductsComponent },
+  { path: 'collection', component: ProductsComponent },
+  { path: 'product/single-product/:id', component: SingleProductComponent },
+  { path: 'cart', component: CartComponent },
   {
     path: 'account',
     children: [

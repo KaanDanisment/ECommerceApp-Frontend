@@ -1,0 +1,53 @@
+<ng-container *ngIf="cart$ | async as cart; else noCart">
+  <div class="title">
+    <h2>ALIŞVERİŞ SEPETİ</h2>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="cart-items col-md-9">
+        <div class="cart-item" *ngFor="let cartItem of cart.cartItems">
+          <div class="container">
+            <div class="row">
+              <div class="product-image col-md-2">
+                <img [src]="cartItem.product.imageUrls[0]" />
+              </div>
+              <div class="product-details col-md-4">
+                <p>{{ cartItem.product.name }}</p>
+                <p>Renk: {{ cartItem.product.color }}</p>
+                <p>Beden: {{ cartItem.product.size }}</p>
+              </div>
+              <div class="product-price col-md-2">
+                <p>{{ cartItem.product.price }} ₺</p>
+              </div>
+              <div class="product-quantity col-md-1">
+                <p>{{ cartItem.quantity }}</p>
+              </div>
+              <div class="cart-item-price col-md-2">
+                <p>{{ cartItem.unitPrice }} ₺</p>
+              </div>
+              <div class="product-remove col-md-1">
+                <i
+                  class="fa-solid fa-trash"
+                  style="color: #c11a1a"
+                  (click)="removeCartItem(cartItem.id)"
+                ></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cart-infos col-md-3">
+        <p>Toplam</p>
+        <p>{{ cart.totalPrice }} ₺</p>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<ng-template #noCart>
+  <div class="noCart">
+    <div>
+      <i class="fa-solid fa-basket-shopping fa-2xl" style="color: #5f6267"></i>
+    </div>
+    <h2>Sepetiniz Boş</h2>
+  </div>
+</ng-template>

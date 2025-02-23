@@ -116,45 +116,40 @@ export class AdminProductsComponent {
       this.page = this.productsSubject.value.length / 20;
     }
     this.page++;
-    if (!this.isFiltered) {
-      if (this.sortProducts) {
-        this.productService.sortProducts(this.condition, this.page).subscribe({
-          next: () => {
-            this.productsSubject.next(
-              this.productService.productsSubject.value
-            );
-            this.products$ = this.productService.products$;
-            console.log(this.productsSubject.value.length);
-            if (this.productsSubject.value.length == this.totalProducts) {
-              this.allLoaded = true;
-              console.log(this.totalProducts);
-            }
-          },
-          error: (err) => {
-            console.error(err.message, err.error);
-            this.toastr.error(`${err.message}`);
-          },
-        });
-      } else {
-        this.productService.getProducts(true, this.page).subscribe({
-          next: () => {
-            this.productsSubject.next(
-              this.productService.productsSubject.value
-            );
-            this.products$ = this.productService.products$;
-            console.log(this.productsSubject.value.length);
 
-            if (this.productsSubject.value.length == this.totalProducts) {
-              this.allLoaded = true;
-            }
+    if (this.sortProducts) {
+      this.productService.sortProducts(this.condition, this.page).subscribe({
+        next: () => {
+          this.productsSubject.next(this.productService.productsSubject.value);
+          this.products$ = this.productService.products$;
+          console.log(this.productsSubject.value.length);
+          if (this.productsSubject.value.length == this.totalProducts) {
+            this.allLoaded = true;
             console.log(this.totalProducts);
-          },
-          error: (err) => {
-            console.error(err.message, err.error);
-            this.toastr.error(`${err.message}`);
-          },
-        });
-      }
+          }
+        },
+        error: (err) => {
+          console.error(err.message, err.error);
+          this.toastr.error(`${err.message}`);
+        },
+      });
+    } else {
+      this.productService.getProducts(true, this.page).subscribe({
+        next: () => {
+          this.productsSubject.next(this.productService.productsSubject.value);
+          this.products$ = this.productService.products$;
+          console.log(this.productsSubject.value.length);
+
+          if (this.productsSubject.value.length == this.totalProducts) {
+            this.allLoaded = true;
+          }
+          console.log(this.totalProducts);
+        },
+        error: (err) => {
+          console.error(err.message, err.error);
+          this.toastr.error(`${err.message}`);
+        },
+      });
     }
   }
 
@@ -163,9 +158,9 @@ export class AdminProductsComponent {
       this.noSorting = false;
       this.allLoaded = false;
       this.productService.getProducts(false).subscribe({
-        next: (allProducts) => {
-          this.productsSubject.next(allProducts);
-          this.products$ = of(allProducts);
+        next: (products) => {
+          this.productsSubject.next(products);
+          this.products$ = of(products);
         },
         error: (err) => {
           console.error(err.message, err.error);

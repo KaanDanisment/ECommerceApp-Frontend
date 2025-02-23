@@ -1,11 +1,45 @@
 .card {
   margin-top: 50px;
   border: none;
+  cursor: pointer;
 }
 .card-title {
   white-space: nowrap; /* Tek satırda kalmasını sağlar */
   overflow: hidden; /* Taşan metni gizler */
   text-overflow: ellipsis; /* Taşan metin için üç nokta ekler */
+}
+.header {
+  display: flex;
+  margin: 2rem 0 0 1rem;
+}
+.filter {
+  display: flex;
+  gap: 1rem;
+  margin-left: auto;
+
+  .btn-dark {
+    width: 6rem;
+  }
+}
+.search {
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 35rem;
+  padding: 0.3rem;
+
+  input {
+    border: none;
+    outline: none;
+    width: 18rem;
+    margin-left: 0.3rem;
+  }
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
 }
 
 .loading-container {
@@ -16,7 +50,17 @@
   height: 100vh;
   text-align: center;
 }
-
+.enlarged-circle {
+  font-size: 24px; /* Increase the font size */
+  border: 2px solid black; /* Add a border */
+  border-radius: 50%; /* Make the border rounded */
+  padding: 10px; /* Add some padding */
+  display: inline-block; /* Ensure the element is inline-block */
+  text-align: center; /* Center the text */
+  width: 40px; /* Set a fixed width */
+  height: 40px; /* Set a fixed height */
+  line-height: 20px; /* Center the text vertically */
+}
 .spinner {
   border: 4px solid #f3f3f3;
   border-top: 4px solid #3498db;

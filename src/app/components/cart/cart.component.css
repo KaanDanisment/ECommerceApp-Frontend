@@ -1,0 +1,93 @@
+@import "@fontsource/poppins/900.css";
+@import "@fontsource/poppins/800.css";
+
+.title {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+  h2 {
+    font-family: poppins, sans-serif;
+    font-size: 2rem;
+    font-weight: bold;
+  }
+}
+
+.cart-item {
+  padding: 1rem 0;
+  border-bottom: 0.1rem solid #f3f2f2;
+}
+.product-image {
+  img {
+    width: 7rem;
+    height: auto;
+    object-fit: cover;
+  }
+}
+.product-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  font-family: poppins, sans-serif;
+  font-size: 1.1rem;
+  line-height: 0.5rem;
+}
+.product-price {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  font-family: poppins, sans-serif;
+  font-weight: bold;
+}
+.product-quantity {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  font-family: poppins, sans-serif;
+  font-weight: bold;
+}
+.cart-item-price {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  font-family: poppins, sans-serif;
+  font-weight: bold;
+}
+.product-remove {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding-bottom: 1.1rem;
+
+  i {
+    cursor: pointer;
+  }
+}
+
+.cart-infos {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 3rem;
+  font-family: poppins, sans-serif;
+  font-size: 1.5rem;
+  font-weight: bold;
+  border-right: 0.1rem solid #f3f2f2;
+  border-left: 0.1rem solid #f3f2f2;
+}
+.noCart {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 10rem;
+  gap: 5rem;
+
+  i {
+    font-size: 7rem;
+  }
+}

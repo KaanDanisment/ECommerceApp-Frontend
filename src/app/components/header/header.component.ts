@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { SubcategoryService } from '../../services/SubcategoryService/subcategory.service';
 import { Subcategory } from '../../models/subcategory.model';
 import { RouterModule } from '@angular/router';
-import { catchError, Observable, of, take, throwError } from 'rxjs';
-import { ToastrService } from 'ngx-toastr';
+import { Observable, take } from 'rxjs';
 import { AuthService } from '../../services/AuthService/auth.service';
-import { AccountService } from '../../services/AccountService/account.service';
+import { CategoryService } from '../../services/CategoryService/category.service';
+import { Category } from '../../models/category.model';
 
 @Component({
   selector: 'app-header',
@@ -21,23 +21,34 @@ export class HeaderComponent {
   navbarOpen = false;
   accountDropdownOpen = false;
   subcategories$!: Observable<Subcategory[] | null>;
+  categories$!: Observable<Category[] | null>;
 
   constructor(
+    private categoryService: CategoryService,
     private subcategoryService: SubcategoryService,
-    private toastr: ToastrService,
     private authService: AuthService
   ) {}
 
   ngOnInit(): void {
-    this.subcategories$ = this.subcategoryService.subcategories$;
     this.loadSubcategories();
-    console.log('header');
-    this.isAuthenticated$ = this.authService.isAuthenticated$;
-    this.authService.isAuthenticated().subscribe();
+    this.loadCategories();
+    this.authService.isAuthenticated().subscribe({
+      next: () => {
+        this.isAuthenticated$ = this.authService.isAuthenticated$;
+      },
+    });
+  }
+
+  loadCategories(): void {
+    this.categories$ = this.categoryService.getCategories();
   }
 
   loadSubcategories(): void {
-    this.subcategoryService.getSubcategories(false).subscribe();
+    this.subcategoryService.getSubcategories(false).subscribe({
+      next: () => {
+        this.subcategories$ = this.subcategoryService.subcategories$;
+      },
+    });
   }
 
   logout(): void {

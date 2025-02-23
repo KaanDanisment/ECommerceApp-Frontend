@@ -90,7 +90,7 @@
         class="image-container"
         id="image-container"
       >
-        <img [src]="url" [alt]="url" />
+        <img [src]="url" [alt]="url" loading="lazy" />
         <label class="delete-btn" for="image-container" (click)="removeImage(i)"
           >×</label
         >

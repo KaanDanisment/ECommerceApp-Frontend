@@ -101,9 +101,12 @@ export class UpdateProductComponent {
     this.productService.getProductById(productId).subscribe({
       next: (product: Product) => {
         this.product = product;
-        this.productForm.patchValue(product);
+        const formattedProduct = {
+          ...product,
+          price: parseFloat(product.price.replace(/,/g, '')),
+        };
+        this.productForm.patchValue(formattedProduct);
         this.previewUrls = product.imageUrls;
-        console.log(this.previewUrls);
         this.loadSubcategoriesByCategoryId(product.categoryId);
       },
     });

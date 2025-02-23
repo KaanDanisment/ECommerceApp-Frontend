@@ -1,25 +1,135 @@
-<div *ngIf="subcategoryImage$ | async as subcategoryImage">
-  <img
-    class="img-fluid"
-    src="https://localhost:7281/static/{{ subcategoryImage.imageUrl }}"
-    alt=""
-  />
+<div *ngIf="subcategory$ | async as subcategoryImage">
+  <img class="img-fluid" [src]="subcategoryImage.imageUrl" alt="" />
 </div>
 <ng-container *ngIf="products$ | async as products; else loading">
   <div class="container">
+    <div class="header">
+      <div class="search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input
+          type="search"
+          placeholder="Ara..."
+          [(ngModel)]="searchTerm"
+          (input)="onSearch()"
+        />
+      </div>
+
+      <div class="filter">
+        <button
+          class="btn btn-warning"
+          *ngIf="isFiltered"
+          (click)="removeFilters()"
+        >
+          Filtreleri kaldır
+        </button>
+        <button class="btn btn-dark" (click)="openFilterModal()">Filtre</button>
+      </div>
+    </div>
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="filterModal"
+      tabindex="-1"
+      aria-labelledby="filterModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="filterModalLabel">Ürün Filtrele</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form [formGroup]="filterForm" (ngSubmit)="filterProducts()">
+              <div class="mb-3">
+                <label class="form-label">Fiyat Aralığı</label>
+                <div class="d-flex gap-2">
+                  <input
+                    type="number"
+                    class="form-control"
+                    placeholder="Min"
+                    formControlName="minPrice"
+                  />
+                  <input
+                    type="number"
+                    class="form-control"
+                    placeholder="Max"
+                    formControlName="maxPrice"
+                  />
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Renk</label>
+                <select class="form-select" formControlName="color">
+                  <option value="" style="color: #999999" selected>
+                    --Renk Seçin--
+                  </option>
+                  <option
+                    [ngValue]="product.color"
+                    *ngFor="let product of products | uniqueBy : 'color'"
+                  >
+                    {{ product.color }}
+                  </option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Beden</label>
+                <select class="form-select" formControlName="size">
+                  <option value="" style="color: #999999" selected>
+                    --Beden Seçin--
+                  </option>
+                  <option *ngFor="let size of sizes" [ngValue]="size">
+                    {{ size }}
+                  </option>
+                </select>
+              </div>
+              <div class="modal-buttons">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  Kapat
+                </button>
+                <button
+                  type="submit"
+                  class="btn btn-dark"
+                  data-bs-dismiss="modal"
+                >
+                  Filtrele
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal End -->
     <div *ngIf="products.length > 0; else noProducts">
       <div class="row">
         <div class="col-12 col-md-3" *ngFor="let product of products">
-          <div class="card">
+          <div
+            class="card"
+            [routerLink]="['/product/single-product', product.products[0].id]"
+          >
             <img
-              src="https://giesto.com/cdn/shop/files/t88_2048x2048.jpg?v=1727034800"
+              [src]="product.imageUrls[0]"
               class="card-img-top"
+              loading="lazy"
             />
             <div class="card-body">
-              <h5 class="card-title">{{ product.name }}</h5>
+              <h5 class="card-title">
+                {{ product.name }} - {{ product.color }}
+              </h5>
               <div class="d-flex justify-content-between">
-                <p class="card-text">{{ product.price | currency }}</p>
-                <p class="me-3">+</p>
+                <p class="card-text">{{ product.price }}</p>
+                <p class="me-3 enlarged-circle">+</p>
               </div>
             </div>
           </div>

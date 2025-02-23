@@ -8,9 +8,9 @@ export class Product {
   description: string;
   price: string;
   stock: number;
-  categoryName: string;
+  categoryName?: string;
   categoryId: number;
-  subcategoryName: string;
+  subcategoryName?: string;
   subcategoryId: number;
   createdAt: string;
   imageUrls: string[];

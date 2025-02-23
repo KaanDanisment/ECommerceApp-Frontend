@@ -11,6 +11,7 @@ import {
 } from 'rxjs';
 import { Product } from '../../models/product.model';
 import { ProductDto } from '../../models/Dtos/productDto.model';
+import { GroupedProductDto } from '../../models/Dtos/groupedProductDto.model';
 
 @Injectable({
   providedIn: 'root',
@@ -18,13 +19,83 @@ import { ProductDto } from '../../models/Dtos/productDto.model';
 export class ProductService {
   private apiUrl = 'https://localhost:7281/api/product';
 
+  // For admin panel
   productsSubject = new BehaviorSubject<Product[]>([]);
   products$ = this.productsSubject.asObservable();
 
   totalPages!: Observable<number>;
   totalProducts!: Observable<number>;
 
+  // For users
+  groupedProductsSubject = new BehaviorSubject<GroupedProductDto[]>([]);
+  groupedProducts$ = this.groupedProductsSubject.asObservable();
+
+  singleProducts!: Observable<Product[]>;
+
   constructor(private http: HttpClient) {}
+
+  //prettier-ignore
+  getSingleGroupedProductById(id: number): Observable<GroupedProductDto> {
+    return this.http
+      .get<GroupedProductDto>(this.apiUrl + `/getGroupedProductByProductId/${id}`)
+      .pipe(
+        map((response) => {
+          this.singleProducts = of(response.products.map((dto: ProductDto) => new Product(dto)));
+          return response;
+        }),
+        tap((groupedProduct) => {
+          console.log(groupedProduct);
+          return groupedProduct;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  //prettier-ignore
+  getGroupedProductsBySubcategoryId(subcategoryId: number): Observable<GroupedProductDto[]> {
+    return this.http
+      .get<GroupedProductDto[]>(
+        this.apiUrl + `/getGroupedProductsBySubcategoryId/${subcategoryId}`
+      )
+      .pipe(
+        tap((groupedProducts) => {
+          if (this.groupedProductsSubject.value.length == 0) {
+            console.log(groupedProducts);
+            this.groupedProductsSubject.next(groupedProducts);
+          } else {
+            console.log(groupedProducts);
+            this.groupedProductsSubject.next([
+              ...this.groupedProductsSubject.value,
+              ...groupedProducts,
+            ]);
+          }
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  //prettier-ignore
+  getGroupedProductsByCategoryId(categoryId: number): Observable<GroupedProductDto[]> {
+    return this.http
+      .get<GroupedProductDto[]>(
+        this.apiUrl + `/getGroupedProductsByCategoryId/${categoryId}`
+      )
+      .pipe(
+        tap((groupedProducts) => {
+          if (this.groupedProductsSubject.value.length == 0) {
+            console.log(groupedProducts);
+            this.groupedProductsSubject.next(groupedProducts);
+          } else {
+            console.log(groupedProducts);
+            this.groupedProductsSubject.next([
+              ...this.groupedProductsSubject.value,
+              ...groupedProducts,
+            ]);
+          }
+        }),
+        catchError(this.handleError)
+      );
+  }
 
   getProducts(forceRefresh: boolean, page?: number): Observable<Product[]> {
     if (forceRefresh || this.productsSubject.value.length === 0) {
@@ -163,11 +234,16 @@ export class ProductService {
     );
   }
 
-  getLatestProducts(): Observable<Product[]> {
-    return this.http.get<ProductDto[]>(this.apiUrl + '/getlatestproducts').pipe(
-      map((response: ProductDto[]) => response.map((dto) => new Product(dto))),
-      catchError(this.handleError)
-    );
+  getLatestProducts(): Observable<GroupedProductDto[]> {
+    return this.http
+      .get<GroupedProductDto[]>(this.apiUrl + '/getlatestproducts')
+      .pipe(
+        tap((groupedProducts) => {
+          console.log(groupedProducts);
+          return groupedProducts;
+        }),
+        catchError(this.handleError)
+      );
   }
 
   createProduct(formData: FormData) {

@@ -27,11 +27,7 @@
             >Anasayfa <span class="sr-only">(current)</span></a
           >
         </li>
-        <li
-          class="nav-item dropdown"
-          [class.show]="dropdownOpen"
-          (click)="toggleDropdown()"
-        >
+        <li class="nav-item dropdown" (click)="toggleDropdown()">
           <a
             class="nav-link dropdown-toggle"
             id="categoriesDropdown"
@@ -42,103 +38,32 @@
             Kategoriler
           </a>
           <div
-            class="dropdown-menu"
+            class="container dropdown-menu"
             [class.show]="dropdownOpen"
             aria-labelledby="categoriesDropdown"
           >
-            <div
-              class="container"
-              *ngIf="subcategories$ | async as subcategories"
-            >
-              <div
-                class="row"
-                *ngIf="subcategories.length > 0; else noSubcategory"
-              >
-                <div class="outerwear col-12 col-md-3">
-                  <p>Dış Giyim</p>
-                  <div
-                    class="subcategory-link"
-                    *ngFor="let subcategory of subcategories"
-                  >
-                    <a
-                      *ngIf="subcategory.categoryId == 2"
-                      [routerLink]="['/product']"
-                      [queryParams]="{ subcategoryId: subcategory.id }"
-                    >
-                      {{ subcategory.name }}
-                    </a>
-                  </div>
-                  <a
-                    [routerLink]="['/product']"
-                    [queryParams]="{ categoryId: 2 }"
-                    >Tümünü Gör</a
-                  >
-                </div>
-                <div class="topwear col-12 col-md-3">
-                  <p>Üst Giyim</p>
-                  <div
-                    class="subcategory-link"
-                    *ngFor="let subcategory of subcategories"
-                  >
-                    <a
-                      *ngIf="subcategory.categoryId == 3"
-                      [routerLink]="['/product']"
-                      [queryParams]="{ subcategoryId: subcategory.id }"
-                      >{{ subcategory.name }}
-                    </a>
-                  </div>
-                  <a
-                    [routerLink]="['/product']"
-                    [queryParams]="{ categoryId: 3 }"
-                    >Tümünü Gör</a
-                  >
-                </div>
-                <div class="bottomwear col-12 col-md-3">
-                  <p>Alt Giyim</p>
-                  <div
-                    class="subcategory-link"
-                    *ngFor="let subcategory of subcategories"
-                  >
-                    <a
-                      *ngIf="subcategory.categoryId == 4"
-                      [routerLink]="['/product']"
-                      [queryParams]="{ subcategoryId: subcategory.id }"
-                      >{{ subcategory.name }}
-                    </a>
-                  </div>
-                  <a
-                    [routerLink]="['/product']"
-                    [queryParams]="{ categoryId: 4 }"
-                    >Tümünü Gör</a
-                  >
-                </div>
-                <div class="accessories col-12 col-md-3">
-                  <p>Aksesuar</p>
-                  <div
-                    class="subcategory-link"
-                    *ngFor="let subcategory of subcategories"
-                  >
-                    <a
-                      *ngIf="subcategory.categoryId == 5"
-                      [routerLink]="['/product']"
-                      [queryParams]="{ subcategoryId: subcategory.id }"
-                      >{{ subcategory.name }}
-                    </a>
-                  </div>
-                  <div class="accessories-see-all">
-                    <a
-                      [routerLink]="['/product']"
-                      [queryParams]="{ categoryId: 5 }"
-                      >Tümünü Gör
-                    </a>
+            <div class="row" *ngIf="categories$ | async as categories">
+              <div class="col-3" *ngFor="let category of categories">
+                <h4>{{ category.name }}</h4>
+                <div *ngIf="subcategories$ | async as subcategories">
+                  <div *ngFor="let subcategory of subcategories">
+                    <div *ngIf="subcategory.categoryId === category.id">
+                      <a
+                        class="dropdown-subcategory-name"
+                        [routerLink]="['/collection']"
+                        [queryParams]="{ subcategoryId: subcategory.id }"
+                      >
+                        {{ subcategory.name }}
+                      </a>
+                    </div>
                   </div>
                 </div>
+                <a
+                  [routerLink]="['/collection']"
+                  [queryParams]="{ categoryId: category.id }"
+                  >Tümünü Gör</a
+                >
               </div>
-              <ng-template #noSubcategory>
-                <div class="noSubcategory">
-                  <p>Alt kategori bulunamadı</p>
-                </div>
-              </ng-template>
             </div>
           </div>
         </li>
@@ -147,8 +72,8 @@
         <a [routerLink]="['/account']">
           <i class="fa fa-user" aria-hidden="true" title="Hesap"></i>
         </a>
-        <a>
-          <i class="fa fa-shopping-bag" aria-hidden="true" title="Sepet"></i>
+        <a [routerLink]="['/cart']">
+          <i class="fa-solid fa-basket-shopping"></i>
         </a>
         <div *ngIf="isAuthenticated$ | async">
           <i

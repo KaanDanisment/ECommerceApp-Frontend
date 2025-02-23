@@ -1,0 +1,72 @@
+<ng-container *ngIf="product$ | async as product; else loading">
+  <div class="container mt-3">
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <div class="image-grid-vertical">
+          <img
+            *ngFor="let image of product.imageUrls"
+            [src]="image"
+            class="img-fluid"
+            loading="lazy"
+          />
+        </div>
+      </div>
+      <div class="col-12 col-md-6 product-details">
+        <div class="sticky-content">
+          <div class="product-features">
+            <h4>{{ product.name }} - {{ product.color }}</h4>
+            <p class="price">{{ product.price }} ₺</p>
+          </div>
+          <div class="sizes">
+            <p>Beden: {{ selectedProduct.size }}</p>
+            <div>
+              <li
+                class="btn btn-outline-dark"
+                (click)="selectProduct(product)"
+                [class.btn-dark]="product.size === selectedProduct.size"
+                [class.btn-outline-dark]="product.size !== selectedProduct.size"
+                *ngFor="let product of product.products"
+              >
+                {{ product.size }}
+              </li>
+            </div>
+          </div>
+          <div class="buttons">
+            <div class="quantity-add-to-cart">
+              <div class="quantity">
+                <i
+                  class="fa-solid fa-minus decrease"
+                  (click)="decreaseQuantity()"
+                ></i>
+                <input
+                  type="number"
+                  class="text-center"
+                  [(ngModel)]="quantity"
+                />
+                <i
+                  class="fa-solid fa-plus increase"
+                  (click)="increaseQuantity()"
+                ></i>
+              </div>
+              <div class="add-to-cart">
+                <button class="btn btn-outline-dark" (click)="addToCart()">
+                  <i class="fa-solid fa-basket-shopping me-3"></i>
+                  SEPETE EKLE
+                </button>
+              </div>
+            </div>
+            <div class="buy-now">
+              <button class="btn btn-outline-dark">Hemen satın al</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<ng-template #loading>
+  <div class="loading-container">
+    <p>Yükleniyor...</p>
+    <div class="spinner"></div>
+  </div>
+</ng-template>

@@ -36,7 +36,9 @@ export class SubcategoryService {
       map((subcategoryDto: SubcategoryDto[]) =>
         subcategoryDto.map((dto) => new Subcategory(dto))
       ),
-      tap((response) => this.subcategoriesSubject.next(response)),
+      tap((response) => {
+        this.subcategoriesSubject.next(response);
+      }),
       catchError(this.handleError)
     );
   }

@@ -33,17 +33,21 @@
   background-color: #ffffff;
 }
 
+a {
+  color: #000000;
+  font-family: poppins;
+}
 a,
 a:hover,
 a:focus {
   text-decoration: none;
 }
 
-a:hover,
-a:focus {
-  color: initial;
+.dropdown-subcategory-name {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.7rem;
 }
-
 .btn,
 .btn:focus {
   outline: none !important;
@@ -81,7 +85,6 @@ a:focus {
 }
 
 .custom_nav-container {
-  z-index: 99999;
   padding: 0;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;

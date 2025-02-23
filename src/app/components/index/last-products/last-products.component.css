@@ -2,6 +2,7 @@
 .card {
   margin-top: 50px;
   border: none;
+  cursor: pointer;
 }
 .card-title {
   white-space: nowrap; /* Tek satırda kalmasını sağlar */
